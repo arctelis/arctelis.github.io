@@ -7,7 +7,9 @@ interface LoanFormProps {
 
 function LoanForm({ values, onChange }: LoanFormProps) {
   return (
-    <form className="card loan-form" onSubmit={(event) => event.preventDefault()}>
+    <form className="card form-card" onSubmit={(event) => event.preventDefault()}>
+      <h2 className="card-title">Kredyt</h2>
+
       <label className="field">
         <span className="field-label">Kwota kredytu</span>
         <span className="input-wrap">

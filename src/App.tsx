@@ -1,8 +1,11 @@
 import { useState } from 'react'
 import LoanForm from './components/LoanForm'
+import OverpaymentForm from './components/OverpaymentForm'
 import { formatMonths, formatPercent, formatPLN } from './lib/format'
 import { toLoanParams, type LoanFormValues } from './lib/loanForm'
+import { toOverpaymentPlan, type OverpaymentFormValues } from './lib/overpaymentForm'
 import { buildSchedule } from './lib/schedule'
+import { summarizeOverpayments } from './lib/summary'
 
 const DEFAULT_VALUES: LoanFormValues = {
   principal: '300 000',
@@ -12,12 +15,21 @@ const DEFAULT_VALUES: LoanFormValues = {
   installmentType: 'equal',
 }
 
+const DEFAULT_OVERPAYMENTS: OverpaymentFormValues = {
+  effect: 'shortenTerm',
+  recurringAmount: '',
+  recurringStartMonth: '',
+  oneTime: [{ id: 1, month: '12', amount: '20 000' }],
+}
+
 function App() {
   const [values, setValues] = useState<LoanFormValues>(DEFAULT_VALUES)
+  const [overpayments, setOverpayments] = useState<OverpaymentFormValues>(DEFAULT_OVERPAYMENTS)
 
   const loan = toLoanParams(values)
   const schedule = buildSchedule(loan)
   const firstInstallment = schedule.length > 0 ? schedule[0].installment : NaN
+  const summary = summarizeOverpayments(loan, toOverpaymentPlan(overpayments))
 
   return (
     <>
@@ -32,9 +44,12 @@ function App() {
           <p className="eyebrow">Kalkulator nadpłaty kredytu</p>
           <h1>Ile zaoszczędzisz, nadpłacając kredyt?</h1>
           <p className="lead">
-            Wpisz parametry kredytu i sprawdź ratę. Za chwilę dodamy nadpłaty i porównanie odsetek.
+            Wpisz parametry kredytu i planowane nadpłaty. Zobaczysz, ile odsetek nie oddasz bankowi.
           </p>
-          <LoanForm values={values} onChange={setValues} />
+          <div className="stack">
+            <LoanForm values={values} onChange={setValues} />
+            <OverpaymentForm values={overpayments} onChange={setOverpayments} />
+          </div>
         </section>
 
         <aside className="card result-panel">
@@ -46,6 +61,13 @@ function App() {
             {values.installmentType === 'equal' ? 'Raty równe' : 'Raty malejące'}
             {Number.isFinite(loan.termMonths) && ` · ${formatMonths(loan.termMonths)}`}
             {Number.isFinite(loan.annualRatePercent) && ` · ${formatPercent(loan.annualRatePercent)}`}
+          </p>
+
+          <hr className="divider" />
+
+          <p className="eyebrow">Oszczędność na odsetkach</p>
+          <p className="result-amount">
+            {Number.isFinite(summary.interestSaved) ? formatPLN(summary.interestSaved) : '—'}
           </p>
         </aside>
       </main>

@@ -68,7 +68,7 @@ Każdy krok kończy się: `npm run test` + `npm run build` + pytania sprawdzają
 
 ### Etap 3 — interfejs (React)
 13. ✅ **Formularz parametrów kredytu** — pierwszy komponent, `useState`, kontrolowane inputy.
-14. **Lista nadpłat** — dodawanie/usuwanie nadpłat jednorazowych, pole nadpłaty cyklicznej.
+14. ✅ **Lista nadpłat** — dodawanie/usuwanie nadpłat jednorazowych, pole nadpłaty cyklicznej.
 15. **Podsumowanie wyników** — komponent przyjmujący dane przez props.
 16. **Tabela harmonogramu** — renderowanie listy przez `map`, klucze (`key`).
 17. **Walidacja** — błędne/puste dane, komunikaty po polsku, logika walidacji w `src/lib/`.
