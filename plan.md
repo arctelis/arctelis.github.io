@@ -22,7 +22,7 @@ Użytkownik wpisuje parametry kredytu i planowane nadpłaty, a aplikacja pokazuj
 
 **Technicznie**
 - Vite + React + TypeScript (strict) + Vitest
-- deploy automatyczny na GitHub Pages (`<login>.github.io`) przez GitHub Actions po każdym pushu na `main`
+- deploy automatyczny na GitHub Pages (https://arctelis.github.io/nadplaty/) przez GitHub Actions po każdym pushu na `main`
 
 ## Założenia obliczeniowe
 

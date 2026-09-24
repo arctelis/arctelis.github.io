@@ -45,4 +45,4 @@ Pełny plan: `plan.md`. Pracujemy krok po kroku według niego.
 ## Środowisko
 
 - Node.js i `gh` są zainstalowane w `~/.local/opt` (bez Homebrew), PATH ustawiony w `~/.zshrc`.
-- Deploy: GitHub Pages, repo typu `<login>.github.io` (strona pod główną domeną, więc `base: '/'` w Vite).
+- Deploy: GitHub Pages, repo `arctelis/nadplaty`, adres https://arctelis.github.io/nadplaty/ (dlatego `base: '/nadplaty/'` w `vite.config.ts`).
