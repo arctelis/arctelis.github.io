@@ -24,6 +24,13 @@ Użytkownik wpisuje parametry kredytu i planowane nadpłaty, a aplikacja pokazuj
 - Vite + React + TypeScript (strict) + Vitest
 - deploy automatyczny na GitHub Pages (`<login>.github.io`) przez GitHub Actions po każdym pushu na `main`
 
+## Założenia obliczeniowe
+
+- Odsetki miesięczne = saldo × (oprocentowanie roczne / 12). Uproszczenie 30/360; banki często liczą dniami (ACT/365).
+- Nadpłata w danym miesiącu wpływa zaraz po racie z tego miesiąca; odsetki od niej naliczają się już od następnego.
+- „Niższa rata”: po każdej nadpłacie rata (albo część kapitałowa przy ratach malejących) jest liczona od nowa na pozostałą liczbę miesięcy.
+- Nadpłata większa niż saldo jest przycinana do salda i kończy kredyt.
+
 ## Poza zakresem
 
 - zmienne oprocentowanie / zmiany WIBOR/WIRON w trakcie
@@ -41,23 +48,23 @@ Pomysły spoza zakresu lądują w `IDEAS.md`.
 Każdy krok kończy się: `npm run test` + `npm run build` + pytania sprawdzające + commit.
 
 ### Etap 0 — środowisko
-0. **Narzędzia i repo** — Node.js, `gh`, git, repozytorium `<login>.github.io` na GitHubie, pliki `CLAUDE.md`, `plan.md`, `IDEAS.md`. *(zrobione przez Claude'a na starcie)*
+0. ✅ **Narzędzia i repo** — Node.js, `gh`, git, repozytorium `<login>.github.io` na GitHubie, pliki `CLAUDE.md`, `plan.md`, `IDEAS.md`. *(zrobione przez Claude'a na starcie)*
 
 ### Etap 1 — szkielet i deploy („hello world” w internecie)
-1. **Szkielet Vite + React + TS** — wygenerowanie projektu, przejście plik po pliku (`package.json`, `index.html`, `main.tsx`, `App.tsx`, `tsconfig`), `npm run dev`.
-2. **Sprzątanie** — usunięcie demo z szablonu, własny `App.tsx` z nagłówkiem po polsku.
-3. **Deploy na GitHub Pages** — workflow GitHub Actions, pierwszy publiczny URL. Od teraz każdy push = nowa wersja online.
-4. **Vitest** — instalacja, skrypt `npm run test`, pierwszy trywialny test, żeby zobaczyć czerwone → zielone.
+1. ✅ **Szkielet Vite + React + TS** — wygenerowanie projektu, przejście plik po pliku (`package.json`, `index.html`, `main.tsx`, `App.tsx`, `tsconfig`), `npm run dev`.
+2. ✅ **Sprzątanie** — usunięcie demo z szablonu, własny `App.tsx` z nagłówkiem po polsku.
+3. ✅ **Deploy na GitHub Pages** — workflow GitHub Actions, pierwszy publiczny URL. Od teraz każdy push = nowa wersja online.
+4. ✅ **Vitest** — instalacja, skrypt `npm run test`, pierwszy trywialny test, żeby zobaczyć czerwone → zielone.
 
 ### Etap 2 — logika finansowa w `src/lib/` (bez UI, same testy)
-5. **Typy danych** — `interface` dla parametrów kredytu, wiersza harmonogramu, nadpłaty.
-6. **Rata annuitetowa** — funkcja liczenia raty + testy z wartościami z Excela (`PMT`).
-7. **Harmonogram rat równych** — pełna tabela bez nadpłat, testy (saldo końcowe = 0, suma kapitału = kwota kredytu).
-8. **Harmonogram rat malejących** — analogicznie.
-9. **Nadpłata jednorazowa** — oba warianty: skrócenie okresu / niższa rata.
-10. **Nadpłaty cykliczne** — połączenie z jednorazowymi.
-11. **Podsumowanie** — funkcja porównująca harmonogram z nadpłatami i bez (oszczędność odsetek, miesiące krócej).
-12. **Formatowanie** — `formatPLN`, formatowanie procentów, testy.
+5. ✅ **Typy danych** — `interface` dla parametrów kredytu, wiersza harmonogramu, nadpłaty.
+6. ✅ **Rata annuitetowa** — funkcja liczenia raty + testy z wartościami z Excela (`PMT`).
+7. ✅ **Harmonogram rat równych** — pełna tabela bez nadpłat, testy (saldo końcowe = 0, suma kapitału = kwota kredytu).
+8. ✅ **Harmonogram rat malejących** — analogicznie.
+9. ✅ **Nadpłata jednorazowa** — oba warianty: skrócenie okresu / niższa rata.
+10. ✅ **Nadpłaty cykliczne** — połączenie z jednorazowymi.
+11. ✅ **Podsumowanie** — funkcja porównująca harmonogram z nadpłatami i bez (oszczędność odsetek, miesiące krócej).
+12. ✅ **Formatowanie** — `formatPLN`, formatowanie procentów, testy.
 
 ### Etap 3 — interfejs (React)
 13. **Formularz parametrów kredytu** — pierwszy komponent, `useState`, kontrolowane inputy.
