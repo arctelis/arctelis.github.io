@@ -8,9 +8,11 @@ const PAID_OFF_EPSILON = 1e-6
 const NO_OVERPAYMENTS: OverpaymentPlan = { oneTime: [], recurring: null, effect: 'shortenTerm' }
 
 function overpaymentForMonth(plan: OverpaymentPlan, month: number): number {
-  return plan.oneTime
+  const oneTime = plan.oneTime
     .filter((overpayment) => overpayment.month === month)
     .reduce((total, overpayment) => total + overpayment.amount, 0)
+  const recurring = plan.recurring !== null && month >= plan.recurring.startMonth ? plan.recurring.amount : 0
+  return oneTime + recurring
 }
 
 export function buildSchedule(loan: LoanParams, plan: OverpaymentPlan = NO_OVERPAYMENTS): ScheduleRow[] {

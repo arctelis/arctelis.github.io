@@ -168,3 +168,74 @@ describe('buildSchedule — one-time overpayment', () => {
     expect(rows[2].balance).toBe(0)
   })
 })
+
+describe('buildSchedule — recurring overpayments', () => {
+  const decreasing: LoanParams = {
+    principal: 120_000,
+    annualRatePercent: 12,
+    termMonths: 120,
+    installmentType: 'decreasing',
+  }
+
+  it('shortenTerm: 1000 extra every month doubles principal repayment, loan ends after 60 months', () => {
+    const rows = buildSchedule(decreasing, {
+      oneTime: [],
+      recurring: { startMonth: 1, amount: 1000 },
+      effect: 'shortenTerm',
+    })
+    expect(rows).toHaveLength(60)
+    expect(rows.every((row) => row.overpayment === 1000)).toBe(true)
+    // 1% * (120k + 118k + ... + 2k)
+    expect(sum(rows, (row) => row.interestPart)).toBeCloseTo(36_600, 6)
+  })
+
+  it('does not overpay before startMonth', () => {
+    const rows = buildSchedule(decreasing, {
+      oneTime: [],
+      recurring: { startMonth: 25, amount: 500 },
+      effect: 'shortenTerm',
+    })
+    expect(rows[23].overpayment).toBe(0)
+    expect(rows[24].overpayment).toBe(500)
+  })
+
+  it('adds up with one-time overpayments in the same month', () => {
+    const rows = buildSchedule(decreasing, {
+      oneTime: [{ month: 10, amount: 10_000 }],
+      recurring: { startMonth: 1, amount: 1000 },
+      effect: 'shortenTerm',
+    })
+    expect(rows[9].overpayment).toBe(11_000)
+    // After month 10: 120k - 10 * 2k - 10k = 90k, then 2k per month -> 45 more months.
+    expect(rows[9].balance).toBeCloseTo(90_000, 6)
+    expect(rows).toHaveLength(55)
+  })
+
+  it('lowerInstallment: installment is recalculated every month and keeps falling', () => {
+    const rows = buildSchedule(mortgage, {
+      oneTime: [],
+      recurring: { startMonth: 1, amount: 500 },
+      effect: 'lowerInstallment',
+    })
+    const rate = 0.075 / 12
+    const expectedMonth2 = (rows[0].balance * rate) / (1 - (1 + rate) ** -359)
+
+    expect(rows[1].installment).toBeCloseTo(expectedMonth2, 8)
+    for (let i = 1; i < rows.length; i++) {
+      expect(rows[i].installment).toBeLessThan(rows[i - 1].installment)
+    }
+    expect(rows[rows.length - 1].balance).toBeCloseTo(0, 6)
+  })
+
+  it('lowerInstallment: a fixed overpayment can still end the loan early', () => {
+    // The installment shrinks towards zero while the overpayment stays at 500,
+    // so near the end the overpayment alone repays the rest (month 341 here).
+    const rows = buildSchedule(mortgage, {
+      oneTime: [],
+      recurring: { startMonth: 1, amount: 500 },
+      effect: 'lowerInstallment',
+    })
+    expect(rows.length).toBeLessThan(360)
+    expect(rows[rows.length - 1].overpayment).toBeLessThan(500)
+  })
+})
