@@ -8,7 +8,7 @@ Użytkownik wpisuje parametry kredytu i planowane nadpłaty, a aplikacja pokazuj
 
 **Dane wejściowe**
 - kwota kredytu (kapitał do spłaty)
-- oprocentowanie roczne (stałe przez cały okres)
+- oprocentowanie roczne: początkowe + opcjonalna lista zmian („od raty nr X → Y%”)
 - okres kredytu w miesiącach
 - rodzaj rat: równe (annuitetowe) lub malejące
 - nadpłaty:
@@ -19,9 +19,12 @@ Użytkownik wpisuje parametry kredytu i planowane nadpłaty, a aplikacja pokazuj
 **Wyniki**
 - podsumowanie: suma odsetek bez nadpłat vs z nadpłatami, oszczędność, liczba miesięcy krócej, nowa rata
 - harmonogram spłat (tabela: miesiąc, rata, część kapitałowa, część odsetkowa, nadpłata, saldo)
+- wykres salda w czasie: bez nadpłat vs z nadpłatami (widać, o ile krócej)
+- wykres struktury rat rok po roku: odsetki / kapitał / nadpłaty
 
 **Technicznie**
 - Vite + React + TypeScript (strict) + Vitest
+- Recharts — wykresy
 - deploy automatyczny na GitHub Pages (https://arctelis.github.io/nadplaty/) przez GitHub Actions po każdym pushu na `main`
 
 ## Założenia obliczeniowe
@@ -30,12 +33,12 @@ Użytkownik wpisuje parametry kredytu i planowane nadpłaty, a aplikacja pokazuj
 - Nadpłata w danym miesiącu wpływa zaraz po racie z tego miesiąca; odsetki od niej naliczają się już od następnego.
 - „Niższa rata”: po każdej nadpłacie rata (albo część kapitałowa przy ratach malejących) jest liczona od nowa na pozostałą liczbę miesięcy.
 - Nadpłata większa niż saldo jest przycinana do salda i kończy kredyt.
+- Zmiana oprocentowania od raty X: odsetki raty X liczone już po nowej stopie. Rata równa przeliczana na pozostały okres (przy „skróceniu okresu” — na okres, jaki zostałby po dotychczasowych nadpłatach); przy ratach malejących część kapitałowa się nie zmienia.
 
 ## Poza zakresem
 
-- zmienne oprocentowanie / zmiany WIBOR/WIRON w trakcie
+- prognozy WIBOR/WIRON (użytkownik sam wpisuje scenariusz zmian stopy)
 - prowizje za wcześniejszą spłatę, ubezpieczenia, RRSO
-- wykresy
 - zapisywanie danych (konto, baza, localStorage), backend
 - eksport do PDF/Excel
 - wiele walut, inne języki interfejsu
@@ -71,9 +74,18 @@ Każdy krok kończy się: `npm run test` + `npm run build` + pytania sprawdzają
 14. ✅ **Lista nadpłat** — dodawanie/usuwanie nadpłat jednorazowych, pole nadpłaty cyklicznej.
 15. **Podsumowanie wyników** — komponent przyjmujący dane przez props.
 16. **Tabela harmonogramu** — renderowanie listy przez `map`, klucze (`key`).
-17. **Walidacja** — błędne/puste dane, komunikaty po polsku, logika walidacji w `src/lib/`.
 
-### Etap 4 — wykończenie
-18. **Style i widok mobilny** — CSS, czytelność na telefonie.
-19. **README** — opis projektu, jak uruchomić, link do aplikacji.
-20. **Przegląd końcowy** — Jakub tłumaczy Claude'owi każdy plik w repo; co niejasne — wracamy.
+### Etap 4 — oprocentowanie zmienne
+17. **Zmiany stopy w logice** — `rateChanges` w `LoanParams`, przeliczanie raty w `buildSchedule`, testy.
+18. **Formularz zmian stopy** — lista „od raty nr X → Y%”, jak nadpłaty jednorazowe.
+
+### Etap 5 — wykresy (Recharts)
+19. **Dane do wykresów** — sumy roczne (odsetki, kapitał, nadpłaty) i saldo na koniec roku w `src/lib/`, testy.
+20. **Wykres salda** — instalacja Recharts, dwie linie: bez nadpłat / z nadpłatami.
+21. **Wykres struktury rat** — słupki roczne: odsetki / kapitał / nadpłaty.
+
+### Etap 6 — wykończenie
+22. **Walidacja** — błędne/puste dane, komunikaty po polsku, logika walidacji w `src/lib/`.
+23. **Style i widok mobilny** — CSS, czytelność na telefonie.
+24. **README** — opis projektu, jak uruchomić, link do aplikacji.
+25. **Przegląd końcowy** — Jakub tłumaczy Claude'owi każdy plik w repo; co niejasne — wracamy.
