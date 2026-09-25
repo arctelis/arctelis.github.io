@@ -1,6 +1,9 @@
 import { useState } from 'react'
+import BalanceChart from './components/BalanceChart'
 import LoanForm from './components/LoanForm'
 import OverpaymentForm from './components/OverpaymentForm'
+import PaymentStructureChart from './components/PaymentStructureChart'
+import { balanceSeries, yearlyBreakdown } from './lib/chartData'
 import { formatMonths, formatPercent, formatPLN } from './lib/format'
 import { toLoanParams, type LoanFormValues } from './lib/loanForm'
 import { toOverpaymentPlan, type OverpaymentFormValues } from './lib/overpaymentForm'
@@ -27,9 +30,12 @@ function App() {
   const [overpayments, setOverpayments] = useState<OverpaymentFormValues>(DEFAULT_OVERPAYMENTS)
 
   const loan = toLoanParams(values)
+  const plan = toOverpaymentPlan(overpayments)
   const schedule = buildSchedule(loan)
+  const scheduleWithOverpayments = buildSchedule(loan, plan)
   const firstInstallment = schedule.length > 0 ? schedule[0].installment : NaN
-  const summary = summarizeOverpayments(loan, toOverpaymentPlan(overpayments))
+  const summary = summarizeOverpayments(loan, plan)
+  const canShowCharts = schedule.length > 0 && Number.isFinite(summary.withOverpayments.totalPaid)
 
   return (
     <>
@@ -71,6 +77,17 @@ function App() {
           </p>
         </aside>
       </main>
+
+      {canShowCharts && (
+        <section className="container charts">
+          <BalanceChart
+            points={balanceSeries(loan.principal, schedule, scheduleWithOverpayments)}
+            payoffMonth={scheduleWithOverpayments.length}
+            monthsSaved={summary.monthsSaved}
+          />
+          <PaymentStructureChart years={yearlyBreakdown(scheduleWithOverpayments)} />
+        </section>
+      )}
     </>
   )
 }

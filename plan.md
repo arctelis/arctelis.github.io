@@ -80,9 +80,9 @@ Każdy krok kończy się: `npm run test` + `npm run build` + pytania sprawdzają
 18. **Formularz zmian stopy** — lista „od raty nr X → Y%”, jak nadpłaty jednorazowe.
 
 ### Etap 5 — wykresy (Recharts)
-19. **Dane do wykresów** — sumy roczne (odsetki, kapitał, nadpłaty) i saldo na koniec roku w `src/lib/`, testy.
-20. **Wykres salda** — instalacja Recharts, dwie linie: bez nadpłat / z nadpłatami.
-21. **Wykres struktury rat** — słupki roczne: odsetki / kapitał / nadpłaty.
+19. ✅ **Dane do wykresów** — sumy roczne (odsetki, kapitał, nadpłaty) i saldo na koniec roku w `src/lib/`, testy.
+20. ✅ **Wykres salda** — instalacja Recharts, dwie linie: bez nadpłat / z nadpłatami.
+21. ✅ **Wykres struktury rat** — słupki roczne: odsetki / kapitał / nadpłaty.
 
 ### Etap 6 — wykończenie
 22. **Walidacja** — błędne/puste dane, komunikaty po polsku, logika walidacji w `src/lib/`.

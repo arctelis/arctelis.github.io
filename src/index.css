@@ -312,3 +312,64 @@ h1 {
   font-size: 12px;
   color: var(--color-muted);
 }
+
+/* Charts */
+
+.charts {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  padding-bottom: 64px;
+}
+
+@media (min-width: 900px) {
+  .charts {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+.chart-card {
+  margin: 0;
+  padding: 24px;
+}
+
+.chart-card figcaption {
+  margin-bottom: 16px;
+}
+
+.chart-card .card-title {
+  margin-bottom: 12px;
+}
+
+.chart-area {
+  height: 280px;
+}
+
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.chart-legend li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-line {
+  width: 16px;
+  height: 2px;
+  border-radius: 1px;
+}
+
+.legend-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
