@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import BalanceChart from './components/BalanceChart'
+import EffectComparison from './components/EffectComparison'
 import LoanForm from './components/LoanForm'
 import OverpaymentForm from './components/OverpaymentForm'
 import PaymentStructureChart from './components/PaymentStructureChart'
 import { balanceSeries, yearlyBreakdown } from './lib/chartData'
+import { compareEffects } from './lib/comparison'
 import { formatMonths, formatPercent, formatPLN } from './lib/format'
 import { toLoanParams, type LoanFormValues } from './lib/loanForm'
 import { toOverpaymentPlan, type OverpaymentFormValues } from './lib/overpaymentForm'
@@ -80,6 +82,7 @@ function App() {
 
           {canShowCharts && (
             <>
+              <EffectComparison comparison={compareEffects(loan, plan)} selected={plan.effect} />
               <BalanceChart
                 points={balanceSeries(loan.principal, schedule, scheduleWithOverpayments)}
                 payoffMonth={scheduleWithOverpayments.length}
