@@ -5,6 +5,7 @@ import EffectComparison from './components/EffectComparison'
 import LoanForm from './components/LoanForm'
 import OverpaymentForm from './components/OverpaymentForm'
 import PaymentStructureChart from './components/PaymentStructureChart'
+import ScheduleExport from './components/ScheduleExport'
 import { balanceSeries, cumulativeInterestSeries, yearlyBreakdown } from './lib/chartData'
 import { compareEffects } from './lib/comparison'
 import { formatMonths, formatPercent, formatPLN } from './lib/format'
@@ -94,6 +95,7 @@ function App() {
                 interestSaved={summary.interestSaved}
               />
               <PaymentStructureChart years={yearlyBreakdown(scheduleWithOverpayments)} />
+              <ScheduleExport withoutOverpayments={schedule} withOverpayments={scheduleWithOverpayments} />
             </>
           )}
         </div>
