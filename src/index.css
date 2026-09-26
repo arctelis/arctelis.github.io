@@ -285,11 +285,10 @@ h1 {
   padding: 28px;
 }
 
-@media (min-width: 900px) {
-  .result-panel {
-    position: sticky;
-    top: 24px;
-  }
+.results-column {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
 }
 
 .result-amount {
@@ -314,19 +313,6 @@ h1 {
 }
 
 /* Charts */
-
-.charts {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 16px;
-  padding-bottom: 64px;
-}
-
-@media (min-width: 900px) {
-  .charts {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  }
-}
 
 .chart-card {
   margin: 0;

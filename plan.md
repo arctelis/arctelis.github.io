@@ -88,7 +88,7 @@ Każdy krok kończy się: `npm run test` + `npm run build` + pytania sprawdzają
 21. ✅ **Wykres struktury rat** — słupki roczne: odsetki / kapitał / nadpłaty.
 
 ### Etap 5b — dodatki
-21a. **Układ** — wykresy w prawej kolumnie pod wynikami, jeden pod drugim.
+21a. ✅ **Układ** — wykresy w prawej kolumnie pod wynikami, jeden pod drugim.
 21b. **Porównanie wariantów** — funkcja w `src/lib/` liczy oba efekty nadpłaty; tabelka obok siebie, wybrany wariant podświetlony.
 21c. **Wykres odsetek narastająco** — dane w `src/lib/`, trzecia karta z wykresem.
 21d. **Eksport do CSV** — generowanie tekstu CSV w `src/lib/` (średnik, przecinek dziesiętny, polskie znaki), przycisk „Pobierz harmonogram”.

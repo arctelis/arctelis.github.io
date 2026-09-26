@@ -58,36 +58,38 @@ function App() {
           </div>
         </section>
 
-        <aside className="card result-panel">
-          <p className="eyebrow">Pierwsza rata</p>
-          <p className="result-amount">
-            {Number.isFinite(firstInstallment) ? formatPLN(firstInstallment) : '—'}
-          </p>
-          <p className="result-meta">
-            {values.installmentType === 'equal' ? 'Raty równe' : 'Raty malejące'}
-            {Number.isFinite(loan.termMonths) && ` · ${formatMonths(loan.termMonths)}`}
-            {Number.isFinite(loan.annualRatePercent) && ` · ${formatPercent(loan.annualRatePercent)}`}
-          </p>
+        <div className="results-column">
+          <aside className="card result-panel">
+            <p className="eyebrow">Pierwsza rata</p>
+            <p className="result-amount">
+              {Number.isFinite(firstInstallment) ? formatPLN(firstInstallment) : '—'}
+            </p>
+            <p className="result-meta">
+              {values.installmentType === 'equal' ? 'Raty równe' : 'Raty malejące'}
+              {Number.isFinite(loan.termMonths) && ` · ${formatMonths(loan.termMonths)}`}
+              {Number.isFinite(loan.annualRatePercent) && ` · ${formatPercent(loan.annualRatePercent)}`}
+            </p>
 
-          <hr className="divider" />
+            <hr className="divider" />
 
-          <p className="eyebrow">Oszczędność na odsetkach</p>
-          <p className="result-amount">
-            {Number.isFinite(summary.interestSaved) ? formatPLN(summary.interestSaved) : '—'}
-          </p>
-        </aside>
+            <p className="eyebrow">Oszczędność na odsetkach</p>
+            <p className="result-amount">
+              {Number.isFinite(summary.interestSaved) ? formatPLN(summary.interestSaved) : '—'}
+            </p>
+          </aside>
+
+          {canShowCharts && (
+            <>
+              <BalanceChart
+                points={balanceSeries(loan.principal, schedule, scheduleWithOverpayments)}
+                payoffMonth={scheduleWithOverpayments.length}
+                monthsSaved={summary.monthsSaved}
+              />
+              <PaymentStructureChart years={yearlyBreakdown(scheduleWithOverpayments)} />
+            </>
+          )}
+        </div>
       </main>
-
-      {canShowCharts && (
-        <section className="container charts">
-          <BalanceChart
-            points={balanceSeries(loan.principal, schedule, scheduleWithOverpayments)}
-            payoffMonth={scheduleWithOverpayments.length}
-            monthsSaved={summary.monthsSaved}
-          />
-          <PaymentStructureChart years={yearlyBreakdown(scheduleWithOverpayments)} />
-        </section>
-      )}
     </>
   )
 }
